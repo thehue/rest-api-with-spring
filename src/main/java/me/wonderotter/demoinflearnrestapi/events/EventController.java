@@ -25,6 +25,9 @@ public class EventController {
     //2) 생성자로 등
     private final ModelMapper modelMapper;
 
+    @Autowired
+    EventValidator eventValidator;
+
     public EventController(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
@@ -34,6 +37,12 @@ public class EventController {
         if(errors.hasErrors()){
             return ResponseEntity.badRequest().build();
         }
+
+        eventValidator.validate(eventDto, errors);
+        if(errors.hasErrors()){
+            return ResponseEntity.badRequest().build();
+        }
+
         Event event = this.modelMapper.map(eventDto, Event.class);
 
         Event newEvent = eventRepository.save(event);
