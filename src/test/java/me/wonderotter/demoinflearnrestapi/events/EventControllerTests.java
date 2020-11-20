@@ -59,7 +59,11 @@ public class EventControllerTests {
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("free").value(false))
                 .andExpect(jsonPath("offline").value(true))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+                //링크 정보를 받는지 테스트(3가지 링크 정보)
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.query-events").exists())
+                .andExpect(jsonPath("_links.update-events").exists());
     }
 
     @Test
@@ -126,7 +130,7 @@ public class EventControllerTests {
                 .andExpect(jsonPath("$[0].field").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
                 .andExpect(jsonPath("$[0].code").exists());
-               // .andExpect(jsonPath("$[0].rejectedValue").exists());
+        // .andExpect(jsonPath("$[0].rejectedValue").exists());
 
     }
 }
